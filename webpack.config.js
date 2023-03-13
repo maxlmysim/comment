@@ -5,9 +5,20 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = "style-loader";
+const babelOptions = (presets) => {
+    const opts = {
+        presets: ['@babel/preset-env'],
+    };
+
+    if (presets) {
+        opts.presets.push(presets);
+    }
+
+    return opts;
+};
 
 const config = {
-    entry: "./src/index.js",
+    entry: "./index.ts",
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "index.js"
@@ -19,18 +30,34 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "index.html",
-        }),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: "./src/assets", to: "src/assets" }
-            ],
         })
     ],
+    resolve: {
+        extensions: ['.ts', '.tsx', '...'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        },
+        modules: [path.resolve(__dirname, './src'), 'node_modules']
+    },
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/i,
-                loader: "babel-loader",
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: babelOptions('@babel/preset-typescript'),
+                },
+            },
+            {
+                test: /\.(ts|js)x$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+                    },
+                },
             },
             {
                 test: /\.css$/i,
