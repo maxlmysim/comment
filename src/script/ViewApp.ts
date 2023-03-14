@@ -11,6 +11,10 @@ export class ViewApp {
   private controller: ControllerApp;
   private model: IModelApp;
   private wrapperComments: HTMLElement;
+  private failTextForInputFieldName: HTMLElement;
+  private failTextForInputFieldComment: HTMLElement;
+  private inputFieldName: HTMLInputElement;
+  private inputFieldComment: HTMLInputElement;
 
   public constructor() {
     this.controller = new ControllerApp(this)
@@ -26,18 +30,24 @@ export class ViewApp {
     const wrapperInput = createTag('div', 'add-comment', '');
     this.formComment = createTag('form', '')
 
-    const inputFieldName = createInput('text', 'add-comment__field-name', 'field-name', 'Ваше имя')
-    const inputFieldComment = createInput('text', 'add-comment__field-text', 'field-text', 'Добавьте ваш комментарий')
+    this.inputFieldName = createInput('text', 'add-comment__field-name', 'field-name', 'Ваше имя')
+    this.inputFieldName.oninput = () => this.deleteFailTextForInputFieldName()
+    this.failTextForInputFieldName = createTag('p', 'add-comment__field-name-fail')
+
+    this.inputFieldComment = createInput('text', 'add-comment__field-text', 'field-text', 'Добавьте ваш комментарий')
+    this.inputFieldComment.oninput = () => this.deleteFailTextForInputFieldComment()
+    this.failTextForInputFieldComment = createTag('p', 'add-comment__field-text-fail')
+
     const date = createInput('date', 'add-comment__input-date', 'input-date')
     const confirmButton = createTag('button', 'add-comment__confirm', 'Sent') as HTMLButtonElement
     confirmButton.type = 'submit'
 
-    this.formComment.append(inputFieldName, inputFieldComment, date, confirmButton)
+    this.formComment.append(this.inputFieldName, this.failTextForInputFieldName, this.inputFieldComment, this.failTextForInputFieldComment, date, confirmButton)
     wrapperInput.append(this.formComment)
 
     this.formComment.addEventListener("submit", (event) => {
       event.preventDefault()
-      const comment: IInputComment = {name: inputFieldName.value, text: inputFieldComment.value, date: date.value}
+      const comment: IInputComment = {name: this.inputFieldName.value, text: this.inputFieldComment.value, date: date.value}
 
       this.controller.addComment(comment)
     })
@@ -91,5 +101,26 @@ export class ViewApp {
 
     wrapper.append(name, date, text, likeBtn, closeBtn)
     return wrapper
+  }
+
+  public showFailTextForInputFieldName(text: string) {
+    this.failTextForInputFieldName.innerText = text
+    this.inputFieldName.classList.add('warning')
+
+  }
+
+  private deleteFailTextForInputFieldName() {
+    this.failTextForInputFieldName.innerText = ''
+    this.inputFieldName.classList.remove('warning')
+  }
+
+  public showFailTextForInputFieldComment(text: string) {
+    this.failTextForInputFieldComment.innerText = text
+    this.inputFieldComment.classList.add('warning')
+  }
+
+  private deleteFailTextForInputFieldComment() {
+    this.failTextForInputFieldComment.innerText = ''
+    this.inputFieldComment.classList.remove('warning')
   }
 }

@@ -19,15 +19,22 @@ export class ControllerApp {
   }
 
   public checkValid(comment: IInputComment): boolean {
-    console.log(comment.date)
     return this.checkFieldName(comment.name) && this.checkFieldText(comment.text)
   }
 
-  private checkFieldName(name:string):boolean {
-    return name.length > 3
+  private checkFieldName(name: string): boolean {
+    if (name.length < 4) {
+      this.view.showFailTextForInputFieldName('Длинна имени должна быть более 3 символов')
+      return false
+    }
+    return true
   }
 
-  private checkFieldText(text:string):boolean {
-    return text.length > 10
+  private checkFieldText(text: string): boolean {
+    if (text.length < 11) {
+      this.view.showFailTextForInputFieldComment('Длинна комментария должна быть более 15 символов')
+      return false
+    }
+    return true
   }
 }
