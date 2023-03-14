@@ -14,12 +14,15 @@ export class ControllerApp {
   public addComment(comment: IInputComment) {
     if (this.checkValid(comment)) {
       this.model.comments.push(comment)
+      this.view.clearAllInputs()
       this.view.updateComments()
     }
   }
 
   public checkValid(comment: IInputComment): boolean {
-    return this.checkFieldName(comment.name) && this.checkFieldText(comment.text)
+    const checkText = this.checkFieldText(comment.text)
+    const checkName = this.checkFieldName(comment.name)
+    return checkName && checkText
   }
 
   private checkFieldName(name: string): boolean {

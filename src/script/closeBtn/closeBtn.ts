@@ -3,7 +3,7 @@ import './closeBtn.scss'
 
 export const createCloseBtn = (): HTMLElement => {
   const wrapper = createTag('div', 'close-wrapper');
-  const close = createTag('button', 'closeBtn', 'X')
+  const close = createTag('button', 'closeBtn', '🗑')
 
   wrapper.onclick = () => {
   }

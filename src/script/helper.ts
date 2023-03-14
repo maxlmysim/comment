@@ -53,3 +53,12 @@ export const createInput: CreateInput = (
   return elem;
 };
 
+
+export const getCurrenTime = (): string => {
+  return  new Date().toLocaleTimeString('en-US', { hour12: false,
+    hour: "numeric",
+    minute: "numeric"});
+}
+
+
+

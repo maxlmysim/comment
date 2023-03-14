@@ -5,5 +5,5 @@ export interface IModelApp {
 }
 
 export const ModelApp: IModelApp = {
-  comments: [{name: 'Maks', text: 'Hello world!', date: '15-12-2015', isLike: false}]
+  comments: []
 }
